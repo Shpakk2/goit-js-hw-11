@@ -36,8 +36,8 @@ function loadMoreFunc(e) {
 
 function loadImages(arrayImages) {
     const markup = arrayImages.hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
-        return `<div class="photo-card">
-        <a class="gallery__item" href="${largeImageURL}">
+        return `<a class="gallery__link" href="${largeImageURL}">
+        <div class="gallery__item">
   <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
   <div class="info">
     <p class="info-item">
@@ -56,8 +56,8 @@ function loadImages(arrayImages) {
       <b>Downloads</b>
       ${downloads}
     </p>
-  </div></a>
-</div>`
+  </div>
+</div></a>`
     }).join("");
     gallery.innerHTML = markup
         loadMoreBtn.classList.remove('hide')
@@ -66,8 +66,8 @@ function loadImages(arrayImages) {
 
 function loadMoreImages(arrayImages) {
     const markup = arrayImages.hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
-        return `<div class="photo-card">
-        <a class="gallery__item" href="${largeImageURL}">
+        return `<a class="gallery__link" href="${largeImageURL}">
+        <div class="gallery__item">
   <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
   <div class="info">
     <p class="info-item">
@@ -86,8 +86,8 @@ function loadMoreImages(arrayImages) {
       <b>Downloads</b>
       ${downloads}
     </p>
-  </div></a>
-</div>`
+  </div>
+</div></a>`
     }).join("");
     gallery.insertAdjacentHTML('beforeend', markup)
     lightbox.refresh()
