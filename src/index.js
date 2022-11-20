@@ -4,6 +4,8 @@ import fetchImages from "./fetchImages";
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
+let lightbox = new SimpleLightbox('.gallery a', { captionsData: "alt", captionPosition: "bottom", captionDelay: 250 });
+
 const searchForm = document.querySelector(".search-form")
 const gallery = document.querySelector('.gallery')
 const loadMoreBtn = document.querySelector('.load-more')
@@ -85,17 +87,11 @@ function loadMoreImages(arrayImages) {
       ${downloads}
     </p>
   </div></a>
-</div>>`
+</div>`
     }).join("");
     gallery.insertAdjacentHTML('beforeend', markup)
+    lightbox.refresh()
 // gallery.insertAdjacentHTML("beforeend", markup)
 }
 
 
-let lightbox = new SimpleLightbox('.gallery a', { captionsData: "alt", captionPosition: "bottom", captionDelay: 250 });
-
-gallery = $('.gallery a').lightbox()
-
-gallery.nextElementSibling()
-
-gallery.next()
