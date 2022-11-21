@@ -1,6 +1,6 @@
 import fetchImages from "./fetchImages";
 
-console.log("hello")
+console.log("let")
 
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
@@ -60,7 +60,8 @@ function loadImages(arrayImages) {
   </div>
 </div></a>`
     }).join("");
-    gallery.innerHTML = markup
+  gallery.innerHTML = markup
+  lightbox.refresh()
         loadMoreBtn.classList.remove('hide')
 // gallery.insertAdjacentHTML("beforeend", markup)
 }
