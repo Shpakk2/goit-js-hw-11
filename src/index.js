@@ -1,5 +1,6 @@
-import "./css/styles.css"
 import fetchImages from "./fetchImages";
+
+console.log("hello")
 
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";

@@ -6,13 +6,13 @@
 .search-form {
     text-align: center;
     background-color: rgb(9, 9, 148);
-  font: inherit;
-  padding: 8px;
-  margin-bottom: 16px;
+    font: inherit;
+    padding: 8px;
+    margin-bottom: 16px;
 }
 
 .hide {
-display: none;
+    display: none;
 }
 
 .info {
@@ -24,6 +24,9 @@ display: none;
     margin-right: 10px;
 }
 
+body {
+  background-color: red;
+}
 /* зробить блочними! і задати ширину */
 
 /* .gallery {
