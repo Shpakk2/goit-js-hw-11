@@ -1,7 +1,5 @@
 import fetchImages from "./fetchImages";
-
-console.log("let")
-
+import { Notify } from 'notiflix';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
@@ -17,58 +15,68 @@ let name
 
 searchForm.addEventListener("submit", onSubmit)
 
-function onSubmit(e) {
-    e.preventDefault()
-    loadMoreBtn.classList.add('hide')
-    page = 1
-    name = e.currentTarget.searchQuery.value
-    fetchImages(name, page).then((arrayImages) => loadImages(arrayImages))
-        .catch((error) => console.log(error))
+async function onSubmit(e) {
+  e.preventDefault()
+      loadMoreBtn.classList.add('hide')
+  if (e.currentTarget.searchQuery.value === "") {
+    Notify.warning("please type some words in the search box")
+    gallery.innerHTML = ""
+  } else {
+      try {
+        page = 1
+        name = e.currentTarget.searchQuery.value
+        const picturesData = await fetchImages(name, page)
+        if (picturesData.hits.length === 0) {
+          Notify.failure("Sorry, there are no images matching your search query. Please try again.")
+          gallery.innerHTML = ""
+        } else {
+          loadImages(picturesData)
+          Notify.success(`Hooray! We found ${picturesData.totalHits} images.`)
+        }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }
 
 loadMoreBtn.addEventListener("click", loadMoreFunc)
 
-function loadMoreFunc(e) {
-    e.preventDefault()
-        page += 1
-        fetchImages(name, page).then((arrayImages) => loadMoreImages(arrayImages))
-            .catch((error) => console.log(error))
+async function loadMoreFunc(e) {
+  e.preventDefault()
+  try {
+    page += 1
+    const picturesData = await fetchImages(name, page)
+    if (gallery.childNodes.length === picturesData.totalHits) {
+      loadMoreBtn.classList.add('hide')
+      Notify.info("We're sorry, but you've reached the end of search results.")
+    } else {
+      loadMoreImages(picturesData)
+    }
+    
+  } catch (error) {
+    console.log(error)
+  }
+
 }
 
 function loadImages(arrayImages) {
-    const markup = arrayImages.hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
-        return `<a class="gallery__link" href="${largeImageURL}">
-        <div class="gallery__item">
-  <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
-  <div class="info">
-    <p class="info-item">
-      <b>Likes</b>
-      ${likes}
-    </p>
-    <p class="info-item">
-      <b>Views</b>
-      ${views}
-    </p>
-    <p class="info-item">
-      <b>Comments</b>
-      ${comments}
-    </p>
-    <p class="info-item">
-      <b>Downloads</b>
-      ${downloads}
-    </p>
-  </div>
-</div></a>`
-    }).join("");
+    const markup = createMarkup(arrayImages)
   gallery.innerHTML = markup
   lightbox.refresh()
-        loadMoreBtn.classList.remove('hide')
-// gallery.insertAdjacentHTML("beforeend", markup)
+  if (!(arrayImages.totalHits < 40)){  loadMoreBtn.classList.remove('hide')}
 }
 
 function loadMoreImages(arrayImages) {
-    const markup = arrayImages.hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
-        return `<a class="gallery__link" href="${largeImageURL}">
+  const markup = createMarkup(arrayImages)
+    gallery.insertAdjacentHTML('beforeend', markup)
+  lightbox.refresh()
+  // gallery.childNodes.length < 500 ?
+}
+
+
+function createMarkup(arrayImages) {
+  return arrayImages.hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
+    return `<a class="gallery__link" href="${largeImageURL}">
         <div class="gallery__item">
   <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
   <div class="info">
@@ -91,9 +99,4 @@ function loadMoreImages(arrayImages) {
   </div>
 </div></a>`
     }).join("");
-    gallery.insertAdjacentHTML('beforeend', markup)
-    lightbox.refresh()
-// gallery.insertAdjacentHTML("beforeend", markup)
 }
-
-
